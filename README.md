@@ -23,7 +23,8 @@ of the term is shown as a **balloon payment**.
 
 ## Persistence
 
-Loan state is stored in **`loan-data.json`** in the project root.
+Loan state is stored in **`loan-data.json`** in the project root when a server is
+available (`npm run dev` / `npm run preview`).
 
 - The file is created automatically the first time the server starts. If it already
   exists, it is read instead and the app resumes where you left off.
@@ -32,12 +33,16 @@ Loan state is stored in **`loan-data.json`** in the project root.
 - The file is **gitignored** and never committed.
 - A corrupted or hand-edited file is sanitized on read, falling back to an empty loan
   rather than crashing the app.
-- If the file cannot be read or written, the app still runs and shows a warning that
-  changes will not be saved.
 
 This is backed by a small Vite plugin (`vite-plugin-loan-store.ts`) that serves
 `GET /api/loan` and `PUT /api/loan` from both `npm run dev` and `npm run preview`. To
 reset the loan, either use **Start a new loan** in the UI or delete `loan-data.json`.
+
+On a static host with no backend (e.g. the GitHub Pages deployment), `/api/loan`
+doesn't exist. `src/storage.ts` detects the 404 on first request and transparently
+falls back to the browser's `localStorage` for the rest of the session, so the app
+still works and shows no error — it just persists per-browser instead of in a shared
+file.
 
 ## Getting started
 
