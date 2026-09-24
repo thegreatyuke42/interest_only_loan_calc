@@ -4,5 +4,6 @@ import { loanStorePlugin } from './vite-plugin-loan-store.js';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/<REPO>/',
   plugins: [react(), loanStorePlugin()],
 });
